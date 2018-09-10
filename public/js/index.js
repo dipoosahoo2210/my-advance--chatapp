@@ -1,5 +1,5 @@
 var socket = io();
-socket.on('connect',()=>{
+socket.on('connect',function(){
     console.log("conneted to the server");
 
 socket.emit('createMessage',{
@@ -8,7 +8,7 @@ socket.emit('createMessage',{
 })
 })
 
-socket.on('disconnect',()=>{
+socket.on('disconnect',function(){
     console.log("dis connect the sever");
 })
 

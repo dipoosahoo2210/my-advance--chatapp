@@ -15,9 +15,21 @@ var io = socketIO(server);
 
 app.use(express.static(publicpath));
 
-   var count = 1;
+var count = 1;
 io.on("connection", (socket) => {
-    console.log(" a  new user is connected" , count++);
+    console.log(" a  new user is connected", count++);
+
+    socket.emit('newMessage',{
+        from:"admin",
+        text:"wealcome to the chat app",
+        createat:new Date().getTime()
+    })
+
+    socket.broadcast.emit('newMessage',{
+        from:"admin" ,
+        text:"new user joins ..wow",
+        createat:new Date().getTime()
+    })
 
 
     socket.emit('newEmail', {
@@ -34,6 +46,13 @@ io.on("connection", (socket) => {
             textat:new Date().getTime()
 
         })
+
+        // socket.broadcast.emit('newMessage', {
+        //     from: message.from,
+        //     text: message.text,
+        //     textat: new Date().getTime()
+        //
+        // })
     })
 
     socket.emit('newMessage', {
