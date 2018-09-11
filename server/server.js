@@ -20,10 +20,10 @@ var count = 1;
 io.on("connection", (socket) => {
     console.log(" a  new user is connected", count++);
 
-    socket.emit('newMessage',generateMessage("admin","welcome to hte chat app"))
+    socket.emit('newMessage', generateMessage("admin", "welcome to he chat app"))
 
 
-    socket.broadcast.emit('newMessage',generateMessage("admin","wow new user joins"))
+    socket.broadcast.emit('newMessage', generateMessage("admin", "wow new user joins"))
 
     //
     // socket.emit('newEmail', {
@@ -31,11 +31,11 @@ io.on("connection", (socket) => {
     //     text: " hey whats goin on",
     //     createat: 1234
     // });
-    socket. on('createMessage', (message) => {
+    socket.on('createMessage', (message, callback) => {
         console.log("createMessage :", message);
 
-        io.emit('newMessage',generateMessage(message.from ,message.text));
-
+        io.emit('newMessage', generateMessage(message.from, message.text));
+        callback("this is form the server");
 
         // socket.broadcast.emit('newMessage', {
         //     from: message.from,
