@@ -2,6 +2,7 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
+var {generateMessage} = require("./utils/message");
 
 
 const publicpath = path.join(__dirname, '../public');
@@ -19,33 +20,22 @@ var count = 1;
 io.on("connection", (socket) => {
     console.log(" a  new user is connected", count++);
 
-    socket.emit('newMessage',{
-        from:"admin",
-        text:"wealcome to the chat app",
-        createat:new Date().getTime()
-    })
-
-    socket.broadcast.emit('newMessage',{
-        from:"admin" ,
-        text:"new user joins ..wow",
-        createat:new Date().getTime()
-    })
+    socket.emit('newMessage',generateMessage("admin","welcome to hte chat app"))
 
 
-    socket.emit('newEmail', {
-        from: "pakaudirector@gmail.com",
-        text: " hey whats goin on",
-        createat: 1234
-    });
-    socket.on('createMessage', (message) => {
+    socket.broadcast.emit('newMessage',generateMessage("admin","wow new user joins"))
+
+    //
+    // socket.emit('newEmail', {
+    //     from: "pakaudirector@gmail.com",
+    //     text: " hey whats goin on",
+    //     createat: 1234
+    // });
+    socket. on('createMessage', (message) => {
         console.log("createMessage :", message);
 
-        io.emit('newMessage', {
-            from: message.from,
-            text: message.text,
-            textat:new Date().getTime()
+        io.emit('newMessage',generateMessage(message.from ,message.text));
 
-        })
 
         // socket.broadcast.emit('newMessage', {
         //     from: message.from,
@@ -54,12 +44,12 @@ io.on("connection", (socket) => {
         //
         // })
     })
-
-    socket.emit('newMessage', {
-        from: "reena rani sahoo",
-        text: "meet you soon",
-        createat: 122344
-    })
+    //
+    // socket.emit('newMessage', {
+    //     from: "reena rani sahoo",
+    //     text: "meet you soon",
+    //     createat: 122344
+    // })
 
     socket.on('disconnect', () => {
         console.log("clint was disconnected");
