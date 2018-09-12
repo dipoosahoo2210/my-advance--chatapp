@@ -20,15 +20,14 @@ socket.on('newMessage', function (message) {
     jQuery('#messages').append(li);
 })
 
-socket.on('generateLocationMessage' ,function (message) {
+socket.on('newLocationMessage',function (message) {
     var li = jQuery('<li></li>');
-    var a = jQuery('<a target="_blank">my  current location</a>');
-    li.text(`${message.from}: `);
-    li.attr('herf',message.url);
+    var a = jQuery('<a target="_blank">my current location</a>')
+    li.text(`${message.from}:  `);
+    a.attr('href',message.url);
     li.append(a);
     jQuery('#messages').append(li);
 })
-
 // socket.emit('createMessage',{
 //     from:"frank",
 //     text:"hi"
@@ -52,19 +51,18 @@ var locationButton = jQuery('#send-location');
 
 
 locationButton.on('click', function () {
-    if (!navigator.geolocation) {
-        alert("browser does not support jio locatio");
-        }
+    if(!navigator.geolocation){
+        alert("your brower is not support  geolocation");
+    }
 
+    navigator.geolocation.getCurrentPosition(function (position) {
+        console.log(position);
 
-        navigator.geolocation.getCurrentPosition(function (position) {
-            console.log(position);
-            socket.emit("createLocationMessage",{
-                longitude:position.coords.longitude,
-                latitude:position.coords.latitude
-
-            })
-        },function () {
-            alert("unable to fetch jio locatio");
+        socket.emit('createLocationMessage',{
+            latitude:position.coords.latitude,
+            longitude:position.coords.longitude
         })
+    },function () {
+        alert("unable to fethch the geolocation");
+    })
 })
