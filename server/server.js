@@ -2,7 +2,7 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
-var {generateMessage} = require("./utils/message");
+var {generateMessage ,generateLocationMessage} = require("./utils/message");
 
 
 const publicpath = path.join(__dirname, '../public');
@@ -20,7 +20,7 @@ var count = 1;
 io.on("connection", (socket) => {
     console.log(" a  new user is connected", count++);
 
-    socket.emit('newMessage', generateMessage("admin", "welcome to he chat app"))
+    socket.emit('newMessage', generateMessage("admin", "welcom to he chat app"))
 
 
     socket.broadcast.emit('newMessage', generateMessage("admin", "wow new user joins"))
@@ -51,8 +51,11 @@ io.on("connection", (socket) => {
     //     createat: 122344
     // })
 
+     socket.on("createLocationMessage" ,(coords)=>{
+         io.emit('newLocationMessage' , generateLocationMessage('admin' ,coords.latitude,coords.longitude));
+     })
     socket.on('disconnect', () => {
-        console.log("clint was disconnected");
+        console.log("clint was disconected");
     })
 })
 server.listen(port, () => {
